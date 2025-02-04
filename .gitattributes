@@ -1,0 +1,9 @@
+# Normalize line endings for all files that Git considers text files.
+* text=auto eol=lf
+
+# Only include the addons folder when downloading from the Asset Library.
+.gitignore       export-ignore
+.gitattributes   export-ignore
+Icon.png         export-ignore
+plugin.cfg       export-ignore
+README.md        export-ignore
