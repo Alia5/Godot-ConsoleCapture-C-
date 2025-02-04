@@ -6,6 +6,17 @@ Provides a `ConsoleListener`-Node that allows you to listen to the output of Std
 Additionally provides static helper methods to force-show a console window on Windows  
 (Useful when debugging with the full Visual Studio IDE, See: <https://github.com/godotengine/godot-proposals/issues/8648> ).
 
+## Installation
+
+a) Install from Godots Asset-Lib (pending)
+
+b) Clone as submodule into the Repos folder
+
+```bash
+git submodule init
+git submodule add git@github.com:Alia5/Godot-ConsoleCapture-C-.git ./addons/ConsoleCapture
+```
+
 ## Usage
 
 ### ConsoleListener-Node
