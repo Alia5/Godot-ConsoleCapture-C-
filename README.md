@@ -10,7 +10,7 @@ Additionally provides static helper methods to force-show a console window on Wi
 
 a) Install from Godots Asset-Lib (pending)
 
-b) Clone as submodule into the Repos folder
+b) Add as submodule into the Repos folder
 
 ```bash
 git submodule init
