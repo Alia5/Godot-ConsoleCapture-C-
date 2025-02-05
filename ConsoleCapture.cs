@@ -7,8 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-public class ConsoleCapture
-{
+public class ConsoleCapture {
     public static UInt32 MaxLen { get; set; } = 1024 * 16;
     public static string StdOutBuffer { get; private set; } = "";
     public static string StdErrBuffer { get; private set; } = "";
@@ -17,66 +16,51 @@ public class ConsoleCapture
     public static bool IsInitialized => _isInitialized;
     private static readonly List<ConsoleListener> Listeners = new List<ConsoleListener>();
 
-    public static void AddListener(ConsoleListener listener)
-    {
+    public static void AddListener(ConsoleListener listener) {
         Listeners.Add(listener);
     }
-    public static void RemoveListener(ConsoleListener listener)
-    {
+    public static void RemoveListener(ConsoleListener listener) {
         Listeners.Remove(listener);
     }
 
-    public static void Initialize()
-    {
-        if (!_isInitialized)
-        {
+    public static void Initialize() {
+        if (!_isInitialized) {
             NativeOutputRedirector.RedirectOutput();
             _isInitialized = true;
         }
     }
 
 
-    public static void AppendStdOut(string str)
-    {
+    public static void AppendStdOut(string str) {
         var totalLen = StdOutBuffer.Length + str.Length;
-        if (totalLen >= MaxLen)
-        {
+        if (totalLen >= MaxLen) {
             StdOutBuffer =
                 StdOutBuffer.Remove(0, (int)((totalLen) - MaxLen) + 1)
                 + str;
-        }
-        else
-        {
+        } else {
             StdOutBuffer += str;
         }
 
-        foreach (var l in Listeners)
-        {
+        foreach (var l in Listeners) {
             l.CallThreadSafe("EmitStdOut", str);
         }
     }
 
-    public static void AppendStdErr(string str)
-    {
+    public static void AppendStdErr(string str) {
         var totalLen = StdErrBuffer.Length + str.Length;
-        if (totalLen >= MaxLen)
-        {
+        if (totalLen >= MaxLen) {
             StdErrBuffer =
                 StdErrBuffer.Remove(0, (int)((totalLen) - MaxLen) + 1)
                 + str;
-        }
-        else
-        {
+        } else {
             StdErrBuffer += str;
         }
-        foreach (var l in Listeners)
-        {
+        foreach (var l in Listeners) {
             l.CallThreadSafe("EmitStdErr", str);
         }
     }
 
-    public class NativeOutputRedirector
-    {
+    public class NativeOutputRedirector {
 
 #pragma warning disable CA2255
         // [ModuleInitializer]
@@ -153,8 +137,7 @@ public class ConsoleCapture
         }
 #endif
 
-        public static void RedirectOutput()
-        {
+        public static void RedirectOutput() {
 #if GODOT_WINDOWS
             // Allocate a console for this app
             if (AllocConsole()) {
@@ -225,12 +208,10 @@ public class ConsoleCapture
 #endif
         }
 
-        private static void CaptureOutput(Stream customStream, FileStream originalStream, bool isStdout)
-        {
+        private static void CaptureOutput(Stream customStream, FileStream originalStream, bool isStdout) {
             byte[] buffer = new byte[4096];
             int bytesRead;
-            while ((bytesRead = customStream.Read(buffer, 0, buffer.Length)) > 0)
-            {
+            while ((bytesRead = customStream.Read(buffer, 0, buffer.Length)) > 0) {
                 // Write to the original stream
                 originalStream.Write(buffer, 0, bytesRead);
                 originalStream.Flush();
@@ -241,14 +222,10 @@ public class ConsoleCapture
             }
         }
 
-        private static void ConsoleHooksRedirector(string output, bool isStdout)
-        {
-            if (isStdout)
-            {
+        private static void ConsoleHooksRedirector(string output, bool isStdout) {
+            if (isStdout) {
                 ConsoleCapture.AppendStdOut(output);
-            }
-            else
-            {
+            } else {
                 ConsoleCapture.AppendStdErr(output);
             }
         }
